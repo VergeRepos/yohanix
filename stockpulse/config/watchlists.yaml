@@ -1,149 +1,285 @@
 discovered:
+- A
+- ABBV
 - ANET
 - AVGO
+- AZO
+- BBY
+- BDX
+- BIIB
+- CAH
+- CBOE
 - CIEN
+- CMG
 - COHR
+- COR
+- COST
+- DG
+- DIS
 - DLR
+- DLTR
+- DPZ
+- DRI
+- ED
 - EQIX
+- ES
 - FCX
 - FIX
 - GEV
+- GILD
 - GLW
 - GRMN
 - HOOD
+- HRL
+- IDXX
 - INTC
 - JBL
 - LITE
 - MPWR
+- MRSH
 - NFLX
+- OMC
 - 'ON'
+- ORLY
+- PG
+- PPG
+- REGN
+- STE
 - STX
 - TER
+- TGT
+- TSCO
+- TSN
+- VLTO
 - WDC
+- WMT
+- WTW
 priority:
 - action: WATCHLIST
-  score: 43.0
-  ticker: AVGO
+  score: 44.7
+  ticker: DLTR
 - action: WATCHLIST
-  score: 42.5
-  ticker: INTC
+  score: 41.2
+  ticker: REGN
 - action: WATCHLIST
-  score: 39.2
-  ticker: GRMN
+  score: 41.0
+  ticker: TGT
 - action: WATCHLIST
-  score: 39.0
-  ticker: ANET
+  score: 38.6
+  ticker: WTW
 - action: WATCHLIST
-  score: 38.9
-  ticker: WDC
+  score: 37.8
+  ticker: TSCO
 - action: WATCHLIST
-  score: 38.0
-  ticker: AMD
+  score: 37.8
+  ticker: DRI
 - action: WATCHLIST
-  score: 37.6
-  ticker: NVDA
+  score: 37.5
+  ticker: BIIB
 - action: WATCHLIST
-  score: 36.9
-  ticker: MRVL
-- action: WATCHLIST
-  score: 34.3
-  ticker: FCX
-- action: WATCHLIST
-  score: 33.4
-  ticker: 'ON'
-- action: WATCHLIST
-  score: 33.2
-  ticker: NFLX
-- action: WATCHLIST
-  score: 32.9
-  ticker: TER
-- action: WATCHLIST
-  score: 32.7
-  ticker: CLS
-- action: WATCHLIST
-  score: 32.2
-  ticker: FIX
-- action: WATCHLIST
-  score: 32.2
-  ticker: SMH
-- action: WATCHLIST
-  score: 31.2
-  ticker: MPWR
-- action: WATCHLIST
-  score: 30.7
-  ticker: STX
-- action: WATCHLIST
-  score: 30.6
-  ticker: GLW
-- action: WATCHLIST
-  score: 30.3
+  score: 37.3
+  ticker: COST
+- action: CAUTION
+  score: -37.1
   ticker: SNDK
 - action: WATCHLIST
-  score: 30.1
-  ticker: CIEN
+  score: 37.1
+  ticker: MRSH
 - action: WATCHLIST
-  score: 29.1
-  ticker: DLR
-- action: WATCHLIST
-  score: 26.6
-  ticker: HOOD
-- action: WATCHLIST
-  score: 26.4
+  score: 36.0
+  ticker: A
+- action: CAUTION
+  score: -35.7
   ticker: JBL
 - action: WATCHLIST
-  score: 26.3
-  ticker: GEV
+  score: 35.0
+  ticker: BDX
+- action: CAUTION
+  score: -34.7
+  ticker: TER
 - action: WATCHLIST
-  score: 25.4
-  ticker: EQIX
+  score: 34.7
+  ticker: IDXX
 - action: WATCHLIST
-  score: 25.4
-  ticker: COHR
+  score: 34.1
+  ticker: GILD
+- action: CAUTION
+  score: -33.6
+  ticker: CLS
 - action: WATCHLIST
-  score: 25.2
-  ticker: LITE
+  score: 31.9
+  ticker: TSN
+- action: WATCHLIST
+  score: 31.7
+  ticker: DIS
+- action: CAUTION
+  score: -30.9
+  ticker: SPWO
+- action: WATCHLIST
+  score: 30.7
+  ticker: ABBV
+- action: WATCHLIST
+  score: 30.4
+  ticker: STE
+- action: WATCHLIST
+  score: 30.1
+  ticker: ORLY
+- action: WATCHLIST
+  score: 30.0
+  ticker: CAH
 - action: HOLD
-  score: 23.4
-  ticker: GOOGL
+  score: -29.5
+  ticker: FCX
+- action: WATCHLIST
+  score: 29.5
+  ticker: WMT
+- action: WATCHLIST
+  score: 29.5
+  ticker: HRL
+- action: WATCHLIST
+  score: 29.0
+  ticker: CMG
+- action: WATCHLIST
+  score: 28.7
+  ticker: ES
+- action: WATCHLIST
+  score: 28.6
+  ticker: OMC
 - action: HOLD
-  score: 20.1
-  ticker: AMZN
+  score: -28.6
+  ticker: NVDA
+- action: WATCHLIST
+  score: 28.6
+  ticker: VLTO
 - action: HOLD
-  score: 19.4
-  ticker: AAPL
+  score: -28.2
+  ticker: INTC
+- action: WATCHLIST
+  score: 27.9
+  ticker: ED
+- action: WATCHLIST
+  score: 27.7
+  ticker: BBY
 - action: HOLD
-  score: 19.3
-  ticker: SPUS
+  score: -27.7
+  ticker: MRVL
+- action: WATCHLIST
+  score: 27.4
+  ticker: AZO
 - action: HOLD
-  score: -18.1
-  ticker: DT
+  score: -27.1
+  ticker: GLD
+- action: WATCHLIST
+  score: 27.0
+  ticker: CBOE
+- action: WATCHLIST
+  score: 26.8
+  ticker: COR
+- action: WATCHLIST
+  score: 26.5
+  ticker: DPZ
 - action: HOLD
-  score: 17.8
-  ticker: META
-- action: HOLD
-  score: -14.7
+  score: -26.3
   ticker: NOW
 - action: HOLD
-  score: 14.5
-  ticker: SPWO
+  score: -26.2
+  ticker: AMD
+- action: WATCHLIST
+  score: 26.1
+  ticker: DG
 - action: HOLD
-  score: -12.2
-  ticker: TMC
+  score: -25.8
+  ticker: 'ON'
 - action: HOLD
-  score: 10.6
-  ticker: MSFT
+  score: -25.7
+  ticker: STX
 - action: HOLD
-  score: 8.5
+  score: -25.6
+  ticker: LITE
+- action: WATCHLIST
+  score: 25.5
+  ticker: PG
+- action: HOLD
+  score: -25.4
+  ticker: CIEN
+- action: HOLD
+  score: -25.1
+  ticker: GLW
+- action: WATCHLIST
+  score: 25.1
+  ticker: PPG
+- action: HOLD
+  score: -24.8
+  ticker: WDC
+- action: HOLD
+  score: -21.7
+  ticker: FIX
+- action: HOLD
+  score: -21.6
   ticker: CLSK
 - action: HOLD
-  score: 5.2
-  ticker: TSLA
+  score: -21.3
+  ticker: TMC
 - action: HOLD
-  score: 4.2
+  score: -21.2
+  ticker: SMH
+- action: HOLD
+  score: -19.1
+  ticker: COHR
+- action: HOLD
+  score: -18.7
+  ticker: AVGO
+- action: HOLD
+  score: -18.0
+  ticker: HOOD
+- action: HOLD
+  score: -17.8
+  ticker: GEV
+- action: HOLD
+  score: -17.0
+  ticker: GOOGL
+- action: HOLD
+  score: 16.6
+  ticker: AAPL
+- action: HOLD
+  score: -16.6
+  ticker: DLR
+- action: HOLD
+  score: -15.2
+  ticker: SPUS
+- action: HOLD
+  score: -15.2
+  ticker: DT
+- action: HOLD
+  score: -13.3
+  ticker: MSFT
+- action: HOLD
+  score: -13.1
+  ticker: ANET
+- action: HOLD
+  score: -11.8
+  ticker: NFLX
+- action: HOLD
+  score: -11.5
+  ticker: MPWR
+- action: HOLD
+  score: 7.6
   ticker: SPSK
 - action: HOLD
-  score: 1.2
-  ticker: GLD
+  score: 4.7
+  ticker: TSLA
+- action: HOLD
+  score: -2.9
+  ticker: META
+- action: HOLD
+  score: 2.5
+  ticker: GRMN
+- action: HOLD
+  score: 1.1
+  ticker: AMZN
+- action: HOLD
+  score: 0.8
+  ticker: EQIX
 user:
 - AAPL
 - MSFT

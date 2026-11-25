@@ -8,7 +8,7 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="StockPulse API", version="0.1.0")
+app = FastAPI(title="Yohanix API", version="1.0.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -1025,7 +1025,7 @@ def suggest_allocation(data: dict):
                 "suggested_pct": round((starter_dollars / amount) * 100, 1),
                 "thesis": rec.get("thesis", ""),
                 "sector": risk_check.get("sector", ""),
-                "cluster": cluster_tickers,
+                "cluster": risk_check.get("cluster_tickers", []),
                 "already_held": ticker in held_tickers,
                 "risk_flags": risk_check.get("reasons", []),
                 "position_type": "starter",

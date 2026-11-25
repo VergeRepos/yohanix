@@ -1135,7 +1135,7 @@ class TestEvaluateIntegration:
 
         with patch(_P_SETTINGS_STRATEGIES, return_value=_strategies()), \
              patch(_P_ALLOC_BUY_ELIGIBLE, return_value=_risk_check(allowed=True)), \
-             patch(_P_ALLOC_BUY_SIZE, return_value=5000.0):
+             patch(_P_ALLOC_BUY_SIZE, return_value=5000.0), patch("stockpulse.signals.market_regime.detect_regime", return_value={"regime": "trending", "adjustment": {"cash_reserve_mult": 1.0}}):
             results = evaluate(recs, scan_trigger="manual")
 
         # First should be EXIT (urgent), then BUY (actionable)

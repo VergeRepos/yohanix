@@ -1,4 +1,4 @@
-"""StockPulse main entrypoint -- starts the scheduler and runs scans."""
+"""Yohanix main entrypoint -- starts the scheduler and runs scans."""
 import argparse
 import logging
 import sys
@@ -87,14 +87,14 @@ def run_scheduler():
         id="weekly_digest",
         name="Weekly Digest",
     )
-    logging.info("StockPulse scheduler started with %d jobs:", len(scheduler.get_jobs()))
+    logging.info("Yohanix scheduler started with %d jobs:", len(scheduler.get_jobs()))
     for job in scheduler.get_jobs():
         logging.info("  - %s: %s", job.name, job.trigger)
 
     # Catch-up: if morning scan was missed today, run it now
     _catch_up_morning_scan(morning_time, tz)
 
-    print("StockPulse scheduler is running. Press Ctrl+C to stop.")
+    print("Yohanix scheduler is running. Press Ctrl+C to stop.")
     try:
         scheduler.start()
     except (KeyboardInterrupt, SystemExit):
@@ -137,7 +137,7 @@ def _catch_up_morning_scan(morning_time: str, tz: str):
         logging.exception("Catch-up scan check failed")
 
 def main():
-    parser = argparse.ArgumentParser(description="StockPulse -- Stock Research & Alert System")
+    parser = argparse.ArgumentParser(description="Yohanix -- Financial Research & Market Intelligence Platform")
     parser.add_argument("mode", choices=["scan", "schedule", "backtest", "performance", "enter"],
         help="scan: one-shot scan | schedule: start scheduler | backtest: run backtest | performance: signal performance report | enter: enter a position")
     parser.add_argument("--log-level", default="INFO", help="Logging level")

@@ -1,14 +1,14 @@
 <div align="center">
-  <img src="stockpulse-ui/public/favicon.svg" alt="StockPulse" width="80" />
-  <h1>StockPulse</h1>
-  <p><strong>Self-hosted stock trading research and alert system</strong></p>
+  <img src="stockpulse-ui/public/favicon.svg" alt="Yohanix" width="80" />
+  <h1>Yohanix</h1>
+  <p><strong>Professional Financial Research and Market Intelligence Platform</strong></p>
   <p>
     <img src="https://img.shields.io/badge/python-3.13-blue?style=flat-square" alt="Python 3.13" />
     <img src="https://img.shields.io/badge/next.js-16-black?style=flat-square" alt="Next.js 16" />
-    <img src="https://img.shields.io/badge/tests-335%2B%20passing-brightgreen?style=flat-square" alt="Tests" />
+    <img src="https://img.shields.io/badge/tests-337%20passing-brightgreen?style=flat-square" alt="Tests" />
     <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License" />
   </p>
-  <p>Scans the S&P 500, generates buy/sell/hold recommendations with composite confidence scores, runs an always-on portfolio advisor, sends Telegram and Discord alerts, and includes a Dark Glass web dashboard.</p>
+  <p>Scans the S&P 500, generates buy/sell/hold recommendations with composite confidence scores, runs an always-on portfolio advisor, sends Telegram and Discord alerts, and includes a professional Dark Glass web dashboard.</p>
   <p><strong>Zero subscriptions. Free data only. Self-hosted. Never auto-trades.</strong></p>
 </div>
 

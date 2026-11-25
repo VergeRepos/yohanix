@@ -51,12 +51,12 @@ def test_format_message_unknown_action_gets_info_emoji():
 
 def test_format_message_includes_type():
     msg = _format_message({"ticker": "T", "action": "BUY", "confidence": 90, "thesis": "Go", "type": "intraday"})
-    assert "[intraday]" in msg
+    assert "[Yohanix intraday]" in msg
 
 
 def test_format_message_defaults_type_to_signal():
     msg = _format_message({"ticker": "T", "action": "BUY", "confidence": 90, "thesis": "Go"})
-    assert "[signal]" in msg
+    assert "[Yohanix signal]" in msg
 
 
 # ---------------------------------------------------------------------------
@@ -133,7 +133,7 @@ def test_advisor_includes_technical_summary():
 def test_advisor_includes_type():
     alert = {"severity": "info", "ticker": "T", "action": "HOLD", "thesis": "ok", "type": "advisor"}
     msg = _format_advisor_message(alert)
-    assert "[advisor]" in msg
+    assert "[Yohanix advisor]" in msg
 
 
 def test_advisor_truncates_long_message():
@@ -211,8 +211,15 @@ def test_send_calls_async_when_configured(mock_send, mock_cfg):
 def test_send_passes_token_and_chat_id(mock_asyncio, mock_cfg):
     """Verify asyncio loop is created and used."""
     mock_loop = mock_asyncio.new_event_loop.return_value
-    mock_loop.run_until_complete.return_value = True
-    send_telegram_alert({"ticker": "X", "action": "BUY", "confidence": 50, "thesis": ""})
+
+    def run_coroutine(coro):
+        coro.close()
+        return True
+
+    mock_loop.run_until_complete.side_effect = run_coroutine
+    result = send_telegram_alert({"ticker": "X", "action": "BUY", "confidence": 50, "thesis": ""})
+
+    assert result is True
     mock_asyncio.new_event_loop.assert_called_once()
     mock_loop.run_until_complete.assert_called_once()
     mock_loop.close.assert_called_once()

@@ -9,8 +9,8 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: "StockPulse",
-  description: "Trading Intelligence Dashboard",
+  title: "Yohanix — Financial Intelligence",
+  description: "Financial Research and Market Intelligence Platform",
   icons: { icon: "/favicon.svg" },
   manifest: "/manifest.json",
 };

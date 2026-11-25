@@ -8,7 +8,7 @@ help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 setup: ## Set up the project (venv, deps, config)
-	@echo "Setting up StockPulse..."
+	@echo "Setting up Yohanix..."
 	@test -d $(VENV) || uv venv $(VENV)
 	@$(VENV)/bin/uv pip install -e ".[dev]" 2>/dev/null || $(PIP) install -e ".[dev]"
 	@test -f .env || cp .env.example .env
@@ -44,7 +44,7 @@ status: ## Show scheduler and service status
 install-service: ## Install as a systemd user service (auto-start on boot)
 	@mkdir -p ~/.config/systemd/user
 	@echo "[Unit]" > ~/.config/systemd/user/stockpulse.service
-	@echo "Description=StockPulse Stock Research & Alert System" >> ~/.config/systemd/user/stockpulse.service
+	@echo "Description=Yohanix Financial Research & Market Intelligence Platform" >> ~/.config/systemd/user/stockpulse.service
 	@echo "After=network-online.target" >> ~/.config/systemd/user/stockpulse.service
 	@echo "Wants=network-online.target" >> ~/.config/systemd/user/stockpulse.service
 	@echo "" >> ~/.config/systemd/user/stockpulse.service

@@ -17,7 +17,7 @@ def _format_message(alert: dict) -> str:
     emoji = {"BUY": "\u2705", "SELL": "\ud83d\udd34", "HOLD": "\u26a0\ufe0f",
              "WATCHLIST": "\ud83d\udd0d", "CAUTION": "\ud83d\udea8"}.get(action, "\u2139\ufe0f")
     alert_type = alert.get("type", "signal")
-    msg = f"{emoji} {ticker} — {action} ({confidence}%)\n\n{thesis}\n\n[{alert_type}]"
+    msg = f"{emoji} {ticker} — {action} ({confidence}%)\n\n{thesis}\n\n[Yohanix {alert_type}]"
     if len(msg) > 4000:
         msg = msg[:3997] + "..."
     return msg
@@ -40,7 +40,7 @@ def _format_advisor_message(alert: dict) -> str:
     msg = f"{prefix} | {ticker} -- {action}\n\n{summary}"
     if details:
         msg += f"\n\n{details}"
-    msg += f"\n\n[{stype}]"
+    msg += f"\n\n[Yohanix {stype}]"
 
     if len(msg) > 4000:
         msg = msg[:3997] + "..."

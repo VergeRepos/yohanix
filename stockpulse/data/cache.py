@@ -35,8 +35,18 @@ def get_cached(key: str):
 def set_cached(key: str, data) -> None:
     _CACHE_DIR.mkdir(parents=True, exist_ok=True)
     path = _cache_path(key)
-    with open(path, "wb") as f:
-        pickle.dump({"time": datetime.now(), "data": data}, f)
+    tmp_path = path.with_suffix(".tmp")
+    try:
+        with open(tmp_path, "wb") as f:
+            pickle.dump({"time": datetime.now(), "data": data}, f)
+        tmp_path.replace(path)
+    except Exception:
+        logger.exception("Failed to write cache for %s", key)
+        if tmp_path.exists():
+            try:
+                tmp_path.unlink()
+            except Exception:
+                pass
 
 
 def cleanup_expired_cache() -> int:

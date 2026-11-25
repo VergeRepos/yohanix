@@ -38,8 +38,18 @@ def load_watchlists() -> dict:
 
 def save_watchlists(data: dict) -> None:
     path = _CONFIG_DIR / "watchlists.yaml"
-    with open(path, "w") as f:
-        yaml.dump(data, f, default_flow_style=False)
+    tmp_path = path.with_suffix(".tmp")
+    try:
+        with open(tmp_path, "w") as f:
+            yaml.dump(data, f, default_flow_style=False)
+        tmp_path.replace(path)
+    except Exception:
+        if tmp_path.exists():
+            try:
+                tmp_path.unlink()
+            except Exception:
+                pass
+        raise
 
 def load_strategies() -> dict:
     path = _CONFIG_DIR / "strategies.yaml"
@@ -55,5 +65,15 @@ def load_portfolio() -> dict:
 
 def save_portfolio(data: dict) -> None:
     path = _CONFIG_DIR / "portfolio.yaml"
-    with open(path, "w") as f:
-        yaml.dump(data, f, default_flow_style=False)
+    tmp_path = path.with_suffix(".tmp")
+    try:
+        with open(tmp_path, "w") as f:
+            yaml.dump(data, f, default_flow_style=False)
+        tmp_path.replace(path)
+    except Exception:
+        if tmp_path.exists():
+            try:
+                tmp_path.unlink()
+            except Exception:
+                pass
+        raise

@@ -1,7 +1,7 @@
 [project]
 name = "stockpulse"
 version = "0.1.0"
-description = "Local stock research and alert system"
+description = "Yohanix - Financial Research and Market Intelligence Platform"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [{name = "Amir Shetaia"}]
@@ -48,7 +48,6 @@ include = ["stockpulse*"]
 
 [tool.pytest.ini_options]
 filterwarnings = [
-    "ignore::pandas.errors.Pandas4Warning",
     "ignore::RuntimeWarning:scipy",
 ]
 

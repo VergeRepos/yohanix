@@ -11,7 +11,7 @@ def _format_embed(alert: dict) -> dict:
     confidence = alert.get("confidence", 0)
     color = {"BUY": 0x00FF00, "SELL": 0xFF0000, "HOLD": 0xFFFF00,
              "WATCHLIST": 0x0099FF, "CAUTION": 0xFF8C00}.get(action, 0x808080)
-    return {"embeds": [{"title": f"{ticker} -- {action}", "description": alert.get("thesis", ""),
+    return {"embeds": [{"title": f"Yohanix: {ticker} -- {action}", "description": alert.get("thesis", ""),
         "color": color, "fields": [
             {"name": "Confidence", "value": f"{confidence}%", "inline": True},
             {"name": "Type", "value": alert.get("type", "signal"), "inline": True},
