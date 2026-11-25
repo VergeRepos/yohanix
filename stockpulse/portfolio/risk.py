@@ -60,7 +60,7 @@ def _compute_correlation(
         df_a = get_price_history(ticker_a, period="6mo")
         df_b = get_price_history(ticker_b, period="6mo")
 
-        if df_a.empty or df_b.empty:
+        if df_a.empty or df_b.empty or "Close" not in df_a.columns or "Close" not in df_b.columns:
             return 0.0
 
         ret_a = df_a["Close"].pct_change().dropna().tail(period)
