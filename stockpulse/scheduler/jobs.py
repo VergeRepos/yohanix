@@ -192,13 +192,16 @@ def signal_tracking_job():
 
 
 def discord_periodic_job():
-    """Send top signals webhook to Discord every 5 minutes."""
-    logger.info("--- Discord 5-minute periodic webhook update ---")
+    """Send top signals webhook to Discord every 1 minute."""
+    logger.info("--- Discord 1-minute periodic webhook update ---")
     try:
         from stockpulse.alerts.discord_alert import send_discord_periodic_update
         send_discord_periodic_update()
     except Exception:
         logger.exception("Discord periodic job failed")
+
+
+def _send_validation_report(n_buy: int, validation: dict):
     """Send a simple ping when validation milestones are reached."""
     status = validation.get("status", "collecting")
     phase = validation.get("sample_size", {}).get("phase", "collecting")
