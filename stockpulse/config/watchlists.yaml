@@ -21,6 +21,7 @@ discovered:
 - DPZ
 - DRI
 - ED
+- EG
 - EQIX
 - ES
 - FCX
@@ -54,9 +55,10 @@ discovered:
 - WDC
 - WMT
 - WTW
+- ZBH
 priority:
 - action: WATCHLIST
-  score: 44.7
+  score: 45.8
   ticker: DLTR
 - action: WATCHLIST
   score: 41.2
@@ -66,21 +68,21 @@ priority:
   ticker: TGT
 - action: WATCHLIST
   score: 38.6
+  ticker: COST
+- action: WATCHLIST
+  score: 38.6
   ticker: WTW
+- action: WATCHLIST
+  score: 38.1
+  ticker: BIIB
 - action: WATCHLIST
   score: 37.8
   ticker: TSCO
 - action: WATCHLIST
   score: 37.8
   ticker: DRI
-- action: WATCHLIST
-  score: 37.5
-  ticker: BIIB
-- action: WATCHLIST
-  score: 37.3
-  ticker: COST
 - action: CAUTION
-  score: -37.1
+  score: -37.2
   ticker: SNDK
 - action: WATCHLIST
   score: 37.1
@@ -92,6 +94,9 @@ priority:
   score: -35.7
   ticker: JBL
 - action: WATCHLIST
+  score: 35.7
+  ticker: DIS
+- action: WATCHLIST
   score: 35.0
   ticker: BDX
 - action: CAUTION
@@ -101,17 +106,17 @@ priority:
   score: 34.7
   ticker: IDXX
 - action: WATCHLIST
-  score: 34.1
+  score: 34.4
   ticker: GILD
 - action: CAUTION
   score: -33.6
   ticker: CLS
 - action: WATCHLIST
+  score: 33.5
+  ticker: WMT
+- action: WATCHLIST
   score: 31.9
   ticker: TSN
-- action: WATCHLIST
-  score: 31.7
-  ticker: DIS
 - action: CAUTION
   score: -30.9
   ticker: SPWO
@@ -121,21 +126,27 @@ priority:
 - action: WATCHLIST
   score: 30.4
   ticker: STE
+- action: CAUTION
+  score: -30.2
+  ticker: INTC
 - action: WATCHLIST
   score: 30.1
   ticker: ORLY
 - action: WATCHLIST
   score: 30.0
   ticker: CAH
+- action: WATCHLIST
+  score: 29.9
+  ticker: VLTO
 - action: HOLD
   score: -29.5
   ticker: FCX
 - action: WATCHLIST
   score: 29.5
-  ticker: WMT
-- action: WATCHLIST
-  score: 29.5
   ticker: HRL
+- action: HOLD
+  score: -29.4
+  ticker: NVDA
 - action: WATCHLIST
   score: 29.0
   ticker: CMG
@@ -146,26 +157,26 @@ priority:
   score: 28.6
   ticker: OMC
 - action: HOLD
-  score: -28.6
-  ticker: NVDA
-- action: WATCHLIST
-  score: 28.6
-  ticker: VLTO
-- action: HOLD
   score: -28.2
-  ticker: INTC
+  ticker: LITE
+- action: WATCHLIST
+  score: 28.1
+  ticker: DG
+- action: WATCHLIST
+  score: 28.1
+  ticker: ZBH
 - action: WATCHLIST
   score: 27.9
   ticker: ED
-- action: WATCHLIST
-  score: 27.7
-  ticker: BBY
 - action: HOLD
   score: -27.7
   ticker: MRVL
 - action: WATCHLIST
   score: 27.4
   ticker: AZO
+- action: WATCHLIST
+  score: 27.4
+  ticker: EG
 - action: HOLD
   score: -27.1
   ticker: GLD
@@ -182,20 +193,14 @@ priority:
   score: -26.3
   ticker: NOW
 - action: HOLD
-  score: -26.2
-  ticker: AMD
-- action: WATCHLIST
-  score: 26.1
-  ticker: DG
+  score: -26.1
+  ticker: WDC
 - action: HOLD
   score: -25.8
   ticker: 'ON'
 - action: HOLD
   score: -25.7
   ticker: STX
-- action: HOLD
-  score: -25.6
-  ticker: LITE
 - action: WATCHLIST
   score: 25.5
   ticker: PG
@@ -209,8 +214,14 @@ priority:
   score: 25.1
   ticker: PPG
 - action: HOLD
-  score: -24.8
-  ticker: WDC
+  score: -24.6
+  ticker: AMD
+- action: HOLD
+  score: 23.7
+  ticker: BBY
+- action: HOLD
+  score: -22.0
+  ticker: SMH
 - action: HOLD
   score: -21.7
   ticker: FIX
@@ -221,8 +232,8 @@ priority:
   score: -21.3
   ticker: TMC
 - action: HOLD
-  score: -21.2
-  ticker: SMH
+  score: -19.4
+  ticker: GEV
 - action: HOLD
   score: -19.1
   ticker: COHR
@@ -233,26 +244,20 @@ priority:
   score: -18.0
   ticker: HOOD
 - action: HOLD
-  score: -17.8
-  ticker: GEV
-- action: HOLD
   score: -17.0
   ticker: GOOGL
-- action: HOLD
-  score: 16.6
-  ticker: AAPL
 - action: HOLD
   score: -16.6
   ticker: DLR
 - action: HOLD
   score: -15.2
-  ticker: SPUS
-- action: HOLD
-  score: -15.2
   ticker: DT
 - action: HOLD
-  score: -13.3
-  ticker: MSFT
+  score: 14.0
+  ticker: AAPL
+- action: HOLD
+  score: -13.9
+  ticker: SPUS
 - action: HOLD
   score: -13.1
   ticker: ANET
@@ -263,10 +268,13 @@ priority:
   score: -11.5
   ticker: MPWR
 - action: HOLD
+  score: -10.1
+  ticker: MSFT
+- action: HOLD
   score: 7.6
   ticker: SPSK
 - action: HOLD
-  score: 4.7
+  score: 7.3
   ticker: TSLA
 - action: HOLD
   score: -2.9

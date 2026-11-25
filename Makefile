@@ -38,7 +38,7 @@ status: ## Show scheduler and service status
 	@systemctl --user status stockpulse 2>/dev/null || echo "Service not installed."
 
 api: ## Start the FastAPI backend on port 18000
-	@$(UVICORN) stockpulse.api.server:app --host 0.0.0.0 --port 18000 --reload
+	@$(UVICORN) stockpulse.api.server:app --host 0.0.0.0 --port 18000 --reload --reload-dir stockpulse
 
 ui: ## Start both backend and frontend
 	@cd stockpulse-ui && npm run dev

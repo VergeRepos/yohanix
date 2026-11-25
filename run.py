@@ -80,12 +80,18 @@ def run_scheduler():
         id="signal_tracking",
         name="Signal Performance Check",
     )
-    from stockpulse.scheduler.jobs import weekly_digest_job
+    from stockpulse.scheduler.jobs import weekly_digest_job, discord_periodic_job
     scheduler.add_job(
         weekly_digest_job,
         CronTrigger(hour="18", minute="0", day_of_week="sun", timezone=tz),
         id="weekly_digest",
         name="Weekly Digest",
+    )
+    scheduler.add_job(
+        discord_periodic_job,
+        CronTrigger(minute="*", timezone=tz),
+        id="discord_periodic",
+        name="Discord 1-min Periodic Update",
     )
     logging.info("Yohanix scheduler started with %d jobs:", len(scheduler.get_jobs()))
     for job in scheduler.get_jobs():

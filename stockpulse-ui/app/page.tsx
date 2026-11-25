@@ -27,7 +27,7 @@ interface DashboardData {
 }
 
 export default function DashboardPage() {
-  const { data, loading, error } = usePolling<DashboardData>(api.dashboard, 30000);
+  const { data, loading, error } = usePolling<DashboardData>(api.dashboard, 15000);
 
   if (loading) {
     return (
@@ -57,7 +57,13 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Dashboard</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-semibold">Dashboard</h1>
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono-data bg-blue-500/10 text-blue-400 border border-blue-500/20">
+          <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+          Live 15s
+        </span>
+      </div>
 
       {/* Stats Cards Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

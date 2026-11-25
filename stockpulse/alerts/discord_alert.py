@@ -36,3 +36,57 @@ def send_discord_alert(alert: dict) -> bool:
     except Exception:
         logger.exception("Discord alert failed")
         return False
+
+
+def send_discord_periodic_update() -> bool:
+    url = get_config().get("discord_webhook_url", "")
+    if not url:
+        return False
+    try:
+        from pathlib import Path
+        import json
+        project_root = Path(__file__).resolve().parent.parent.parent
+        json_dir = project_root / "outputs" / "json"
+        recs = []
+        if json_dir.exists():
+            files = sorted(json_dir.glob("*.json"), reverse=True)
+            for f in files:
+                try:
+                    with open(f) as fh:
+                        data = json.load(fh)
+                        if isinstance(data, dict) and "recommendations" in data:
+                            recs = data.get("recommendations", [])
+                            break
+                except Exception:
+                    continue
+
+        top10 = sorted(recs, key=lambda r: abs(r.get("composite_score", 0)), reverse=True)[:10]
+        fields = []
+        for r in top10:
+            ticker = r.get("ticker", "???")
+            action = r.get("action", "HOLD")
+            score = r.get("composite_score", 0)
+            conf = r.get("confidence", 0)
+            thesis = r.get("thesis", "No thesis provided.")[:120]
+            emoji = {"BUY": "🟢", "SELL": "🔴", "WATCHLIST": "🔵", "HOLD": "🟡", "CAUTION": "🟠"}.get(action, "⚪")
+            fields.append({
+                "name": f"{emoji} {ticker} — {action} (Score: {score:+.1f} | Conf: {conf}%)",
+                "value": thesis,
+                "inline": False
+            })
+
+        payload = {
+            "embeds": [{
+                "title": "📊 Yohanix Live Market Top 10 Report",
+                "description": f"Automated 1-minute live update (BUY, SELL, WATCHLIST, HOLD). Total scanned: {len(recs)} tickers.",
+                "color": 0x0099FF,
+                "fields": fields if fields else [{"name": "Status", "value": "No scan data found yet. Run a scan via Make or UI.", "inline": False}]
+            }]
+        }
+        resp = requests.post(url, json=payload, timeout=10)
+        resp.raise_for_status()
+        logger.info("Discord periodic top 10 update sent successfully (%d tickers)", len(top10))
+        return True
+    except Exception:
+        logger.exception("Discord periodic update failed")
+        return False

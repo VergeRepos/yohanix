@@ -23,7 +23,7 @@ import { ApiErrorBanner } from "@/components/api-error-banner";
 const ACTIONS: Action[] = ["BUY", "WATCHLIST", "HOLD", "CAUTION", "SELL"];
 
 export default function WatchlistPage() {
-  const { data, loading, error, refresh } = usePolling<Recommendation[]>(api.watchlist, 30000);
+  const { data, loading, error, refresh } = usePolling<Recommendation[]>(api.watchlist, 15000);
   const [filter, setFilter] = useState<Action | "ALL">("ALL");
   const [search, setSearch] = useState("");
   const [addTicker, setAddTicker] = useState("");
@@ -102,7 +102,13 @@ export default function WatchlistPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Watchlist</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-semibold">Watchlist</h1>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono-data bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+            Live 15s
+          </span>
+        </div>
         <div className="flex items-center gap-2">
           <Input
             value={addTicker}
