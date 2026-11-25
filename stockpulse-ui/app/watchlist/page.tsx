@@ -18,6 +18,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Recommendation, Action } from "@/lib/types";
 import { TickerLink } from "@/components/ticker-link";
+import { ApiErrorBanner } from "@/components/api-error-banner";
 
 const ACTIONS: Action[] = ["BUY", "WATCHLIST", "HOLD", "CAUTION", "SELL"];
 
@@ -95,12 +96,7 @@ export default function WatchlistPage() {
   }
 
   if (error) {
-    return (
-      <div className="space-y-6">
-        <h1 className="text-2xl font-semibold">Watchlist</h1>
-        <div className="glass-card p-6 text-red-400">Failed to load watchlist: {error}</div>
-      </div>
-    );
+    return <ApiErrorBanner error={error} title="Watchlist" />;
   }
 
   return (

@@ -15,6 +15,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Recommendation, Activity, Portfolio } from "@/lib/types";
 import { TickerLink } from "@/components/ticker-link";
+import { ApiErrorBanner } from "@/components/api-error-banner";
 
 interface DashboardData {
   top_signals: Recommendation[];
@@ -45,12 +46,7 @@ export default function DashboardPage() {
   }
 
   if (error) {
-    return (
-      <div className="space-y-6">
-        <h1 className="text-2xl font-semibold">Dashboard</h1>
-        <div className="glass-card p-6 text-red-400">Failed to load dashboard: {error}</div>
-      </div>
-    );
+    return <ApiErrorBanner error={error} title="Dashboard" />;
   }
 
   const portfolio = data?.portfolio;
