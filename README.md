@@ -120,7 +120,7 @@
 ## Architecture
 
 ```
-stockpulse (systemd)         stockpulse-api (port 18000)     stockpulse-ui (port 3003)
+yohanix (systemd)          yohanix-api (port 18000)     yohanix-ui (port 3003)
     |                              |                              |
     |-- 09:35 Morning scan    <-- REST API (FastAPI) -->     Dark Glass UI
     |-- 30min Intraday check       |                         9 pages
@@ -164,8 +164,8 @@ stockpulse/
 ## Quick Start
 
 ```bash
-git clone https://github.com/NightBaRron1412/stockpulse.git
-cd stockpulse
+git clone https://github.com/NightBaRron1412/yohanix.git
+cd yohanix
 
 make setup                    # Create venv, install deps, copy config
 # Edit .env — set FINNHUB_API_KEY (free at https://finnhub.io)
