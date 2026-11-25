@@ -42,7 +42,7 @@ export function NavBar() {
 
   return (
     <nav className="sticky top-0 z-50 border-b border-slate-800/55 bg-slate-950/80 backdrop-blur-xl">
-      <div className="max-w-[1400px] mx-auto px-6 flex items-center h-14 gap-1">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 flex items-center h-14 gap-1">
         <Link href="/" className="flex items-center gap-2 mr-8">
           <img src="/logo.svg" alt="Yohanix" className="w-7 h-7" />
           <span className="font-semibold text-lg tracking-tight">Yohanix</span>

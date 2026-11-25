@@ -18,7 +18,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
   themeColor: "#0f172a",
 };
 
@@ -29,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <TooltipProvider>
           <TickerProvider>
             <NavBar />
-            <main className="max-w-[1400px] mx-auto px-6 py-6">
+            <main className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">
               {children}
             </main>
           </TickerProvider>
