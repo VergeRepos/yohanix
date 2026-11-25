@@ -1,6 +1,6 @@
 # Yohanix on Gentoo Linux & Linux
 
-This guide provides specific instructions for setting up and running **Yohanix** on **Gentoo Linux** and other Linux distributions.
+This guide provides specific instructions for setting up, running, and accessing **Yohanix** on **Gentoo Linux** and other Linux distributions — including access from your phone over local Wi-Fi.
 
 ---
 
@@ -15,8 +15,6 @@ emerge --ask dev-lang/python dev-python/pip sys-devel/gcc dev-python/wheel
 # 2. Install Node.js (with npm) for the web UI dashboard
 emerge --ask net-libs/nodejs
 ```
-
-*Note: Ensure your Python use flags include `sqlite` and `ssl` (enabled by default in Gentoo profiles).*
 
 ---
 
@@ -55,22 +53,33 @@ make all
 
 ---
 
-## 4. Running Yohanix on Linux / Gentoo
+## 4. Running Yohanix & Accessing from Your Phone
 
-### Run a One-Shot S&P 500 Scan
-```bash
-make run
-```
+To access StockPulse from your phone while your laptop is running on the same Wi-Fi network:
 
-### Start the FastAPI Backend & Web UI
-- **Backend API (Port 18000):**
-  ```bash
-  make api
-  ```
-- **Web UI Dashboard (Port 3003):**
-  ```bash
-  make ui
-  ```
+1. **Find your laptop's local IP address**:
+   - On Linux / Gentoo: `ip addr show` or `hostname -I` (e.g. `192.168.1.50`)
+   - On Windows: `ipconfig`
+
+2. **Start the Backend API (Port 18000)**:
+   ```bash
+   make api
+   ```
+   *(Binds to `0.0.0.0`, accessible across your local network).*
+
+3. **Start the Web UI Dashboard (Port 3003)**:
+   ```bash
+   make ui
+   ```
+   *(Configured to bind to `0.0.0.0` and automatically route API requests to your laptop's local IP).*
+
+4. **Open on your Phone**:
+   - Connect your phone to the same Wi-Fi network.
+   - Open your mobile browser and go to:
+     ```text
+     http://<YOUR_LAPTOP_IP>:3003
+     ```
+     *(Example: `http://192.168.1.50:3003`)*
 
 ---
 
@@ -82,20 +91,15 @@ Yohanix includes built-in OpenRC support for Gentoo Linux.
    ```bash
    make install-service
    ```
-2. This creates `yohanix.initd` in your project directory. Copy it to `/etc/init.d/` and make it executable:
+2. Copy it to `/etc/init.d/` and make it executable:
    ```bash
    sudo cp yohanix.initd /etc/init.d/yohanix
    sudo chmod +x /etc/init.d/yohanix
    ```
-3. Edit `/etc/init.d/yohanix` if needed to point to your absolute project directory and virtualenv python path.
-4. Add Yohanix to the default runlevel and start the service:
+3. Add Yohanix to the default runlevel and start the service:
    ```bash
    sudo rc-update add yohanix default
    sudo rc-service yohanix start
-   ```
-5. Check service status:
-   ```bash
-   sudo rc-service yohanix status
    ```
 
 ---
@@ -103,4 +107,4 @@ Yohanix includes built-in OpenRC support for Gentoo Linux.
 ## Troubleshooting
 
 - **Python Command Missing**: If `python` command is not found on your Gentoo system, `make setup` automatically tries `python3`, `python3.12`, or `python3.13`.
-- **C Extension Compilation Errors**: If `scipy` or `pandas-ta` fail to build from source via pip, ensure `sys-devel/gcc`, `dev-python/wheel`, and Python dev headers (`dev-lang/python:3.12`) are installed on your Gentoo system.
+- **Phone Connection Issues**: Ensure both your laptop and phone are on the same Wi-Fi network, and that your laptop's firewall (e.g., `iptables`, `nftables`, `ufw`, or Gentoo `iptables-services`) allows inbound connections on ports `3003` and `18000`.

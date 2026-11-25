@@ -1,4 +1,13 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:18000";
+const getApiBase = () => {
+  if (typeof window !== "undefined") {
+    if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
+    const host = window.location.hostname;
+    return `http://${host}:18000`;
+  }
+  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:18000";
+};
+
+const API_BASE = getApiBase();
 
 async function fetcher<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${url}`, options);
