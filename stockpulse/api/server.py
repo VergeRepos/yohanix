@@ -260,6 +260,21 @@ def _get_scan_status() -> dict:
 # Dashboard
 # ═══════════════════════════════════════════════════
 
+@app.get("/api/health")
+def health_check():
+    """System health check endpoint."""
+    import sys
+    cache_dir = PROJECT_ROOT / "outputs" / ".cache"
+    cache_files = list(cache_dir.glob("**/*")) if cache_dir.exists() else []
+    return {
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "python_version": sys.version,
+        "cache_items": len(cache_files),
+        "outputs_dir_exists": (PROJECT_ROOT / "outputs").exists(),
+    }
+
+
 @app.get("/api/dashboard")
 def get_dashboard():
     from stockpulse.portfolio.tracker import get_portfolio_status
