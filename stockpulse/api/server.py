@@ -43,8 +43,7 @@ def start_background_scheduler():
         h, m = morning_time.split(":")
         scheduler.add_job(morning_scan_job, CronTrigger(hour=int(h), minute=int(m), day_of_week="mon-fri", timezone=tz), id="morning_scan")
 
-        interval_min = sched_cfg.get("intraday_interval_minutes", 30)
-        scheduler.add_job(intraday_check_job, CronTrigger(minute=f"*/{interval_min}", hour="9-16", day_of_week="mon-fri", timezone=tz), id="intraday_check")
+        scheduler.add_job(intraday_check_job, IntervalTrigger(seconds=45), id="intraday_check", name="45s Intraday Scan & Update")
 
         rebound_interval = sched_cfg.get("rebound_scan_interval_minutes", 10)
         scheduler.add_job(rebound_scan_job, CronTrigger(minute=f"*/{rebound_interval}", hour="10-15", day_of_week="mon-fri", timezone=tz), id="rebound_scan")
@@ -56,7 +55,7 @@ def start_background_scheduler():
         sec_interval = sched_cfg.get("sec_scan_interval_hours", 2)
         scheduler.add_job(sec_scan_job, CronTrigger(hour=f"*/{sec_interval}", day_of_week="mon-fri", timezone=tz), id="sec_scan")
 
-        scheduler.add_job(portfolio_check_job, CronTrigger(minute=f"*/{interval_min}", hour="9-16", day_of_week="mon-fri", timezone=tz), id="portfolio_check")
+        scheduler.add_job(portfolio_check_job, IntervalTrigger(seconds=45), id="portfolio_check", name="45s Portfolio Check")
         scheduler.add_job(signal_tracking_job, CronTrigger(hour="17", minute="0", day_of_week="mon-fri", timezone=tz), id="signal_tracking")
         scheduler.add_job(weekly_digest_job, CronTrigger(hour="18", minute="0", day_of_week="sun", timezone=tz), id="weekly_digest")
 
