@@ -27,7 +27,7 @@ interface DashboardData {
 }
 
 export default function DashboardPage() {
-  const { data, loading, error } = usePolling<DashboardData>(api.dashboard, 15000);
+  const { data, loading, error } = usePolling<DashboardData>(api.dashboard, 5000);
 
   if (loading) {
     return (

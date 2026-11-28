@@ -26,6 +26,7 @@ def start_background_scheduler():
     try:
         from apscheduler.schedulers.background import BackgroundScheduler
         from apscheduler.triggers.cron import CronTrigger
+        from apscheduler.triggers.interval import IntervalTrigger
         from stockpulse.config.settings import load_strategies
         from stockpulse.scheduler.jobs import (
             morning_scan_job, intraday_check_job, eod_recap_job,
@@ -59,8 +60,8 @@ def start_background_scheduler():
         scheduler.add_job(signal_tracking_job, CronTrigger(hour="17", minute="0", day_of_week="mon-fri", timezone=tz), id="signal_tracking")
         scheduler.add_job(weekly_digest_job, CronTrigger(hour="18", minute="0", day_of_week="sun", timezone=tz), id="weekly_digest")
 
-        # 1-minute Discord periodic top 10 report
-        scheduler.add_job(discord_periodic_job, CronTrigger(minute="*", timezone=tz), id="discord_periodic", name="Discord 1-min Periodic Update")
+        # 30-second Discord periodic top 10 report
+        scheduler.add_job(discord_periodic_job, IntervalTrigger(seconds=30), id="discord_periodic", name="Discord 30-sec Periodic Update")
 
         scheduler.start()
         logger.info("Background scheduler started successfully inside FastAPI with %d jobs", len(scheduler.get_jobs()))

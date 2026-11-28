@@ -9,8 +9,8 @@ import { Input } from "@/components/ui/input";
 import { TickerLink } from "@/components/ticker-link";
 
 export default function ReboundPage() {
-  const { data: status, refresh: refreshStatus } = usePolling<any>(api.reboundStatus, 30000);
-  const { data: exits } = usePolling<any[]>(api.reboundExits, 15000);
+  const { data: status, refresh: refreshStatus } = usePolling<any>(api.reboundStatus, 5000);
+  const { data: exits } = usePolling<any[]>(api.reboundExits, 5000);
   const [scanning, setScanning] = useState(false);
   const [candidates, setCandidates] = useState<any[]>([]);
   const [closing, setClosing] = useState<string | null>(null);

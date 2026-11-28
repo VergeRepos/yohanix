@@ -19,7 +19,7 @@ import { useState } from "react";
 import { TickerLink } from "@/components/ticker-link";
 
 export default function PortfolioPage() {
-  const { data, loading, error, refresh } = usePolling<any>(api.portfolio, 30000);
+  const { data, loading, error, refresh } = usePolling<any>(api.portfolio, 5000);
   const [sortKey, setSortKey] = useState<string>("pnl_pct");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [cashInput, setCashInput] = useState("");
