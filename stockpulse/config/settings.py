@@ -23,6 +23,7 @@ def get_config() -> dict:
         "telegram_chat_id": os.getenv("TELEGRAM_CHAT_ID", ""),
         "alerts_discord": os.getenv("ALERTS_DISCORD", "false").lower() == "true",
         "discord_webhook_url": os.getenv("DISCORD_WEBHOOK_URL", ""),
+        "discord_top_10_url": os.getenv("DISCORD_TOP_10_URL", "http://localhost:18000/api/discord/top-10"),
         "trading_enabled": os.getenv("TRADING_ENABLED", "false").lower() == "true",
         "trading_mode": os.getenv("TRADING_MODE", "paper"),
         "finnhub_api_key": os.getenv("FINNHUB_API_KEY", ""),

@@ -6,6 +6,7 @@ from datetime import datetime
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Response
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Yohanix API", version="1.0.0")
@@ -804,6 +805,80 @@ def api_send_discord_trades():
     if not result.get("success"):
         raise HTTPException(400, result.get("error", "Failed to send trade list"))
     return result
+
+
+@app.get("/api/discord/top-10", response_class=HTMLResponse)
+def discord_top_10_page():
+    """Render a clean HTML page displaying the top 10 best trades when the Discord button is clicked."""
+    recs = _get_latest_scan()
+    top10 = sorted(recs, key=lambda r: abs(r.get("composite_score", 0)), reverse=True)[:10]
+
+    cards_html = ""
+    for r in top10:
+        ticker = r.get("ticker", "???")
+        action = r.get("action", "HOLD")
+        score = r.get("composite_score", 0.0)
+        conf = r.get("confidence", 0)
+        thesis = r.get("thesis", "No thesis provided.")
+        tech = r.get("technical_summary", "N/A")
+        inv = r.get("invalidation", "N/A")
+
+        if action == "BUY":
+            badge_style = "background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.4);"
+        elif action == "WATCHLIST":
+            badge_style = "background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-color: rgba(59, 130, 246, 0.4);"
+        else:
+            badge_style = "background: rgba(234, 179, 8, 0.2); color: #facc15; border-color: rgba(234, 179, 8, 0.4);"
+
+        cards_html += f"""
+        <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 12px; padding: 20px; margin-bottom: 16px; backdrop-filter: blur(12px);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 24px; font-weight: bold; color: #f8fafc;">{ticker}</span>
+                    <span style="padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid; {badge_style}">{action}</span>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 14px; font-weight: 600; color: #38bdf8;">Score: {score:+.1f}</div>
+                    <div style="font-size: 12px; color: #94a3b8;">Confidence: {conf}%</div>
+                </div>
+            </div>
+            <p style="color: #cbd5e1; font-size: 14px; margin-bottom: 12px; line-height: 1.5;">{thesis}</p>
+            <div style="font-size: 12px; color: #94a3b8; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; border-top: 1px solid rgba(51, 65, 85, 0.4); padding-top: 12px; margin-top: 12px;">
+                <div><strong style="color: #e2e8f0;">Technical:</strong> {tech}</div>
+                <div><strong style="color: #e2e8f0;">Invalidation:</strong> {inv}</div>
+            </div>
+        </div>
+        """
+
+    if not top10:
+        cards_html = "<div style='text-align: center; color: #94a3b8; padding: 40px;'>No scan data found yet. Run a scan from the Yohanix dashboard.</div>"
+
+    html = f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Yohanix — Top 10 Best Trades</title>
+    </head>
+    <body style="background-color: #030712; color: #f8fafc; font-family: ui-sans-serif, system-ui, sans-serif; min-height: 100vh; padding: 32px 16px;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+                <div>
+                    <h1 style="font-size: 28px; font-weight: bold; letter-spacing: -0.025em; color: #f8fafc;">📊 Yohanix Top 10 Best Trades</h1>
+                    <p style="font-size: 14px; color: #94a3b8; margin-top: 4px;">High-conviction market intelligence & trade recommendations</p>
+                </div>
+                <a href="http://localhost:3003" target="_blank" style="background: #2563eb; color: white; padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; text-decoration: none;">Open Dashboard →</a>
+            </div>
+            {cards_html}
+            <div style="text-align: center; margin-top: 32px; font-size: 12px; color: #64748b;">
+                Yohanix Financial Research Platform • Self-Hosted • Zero Subscriptions
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html)
 
 
 # ═══════════════════════════════════════════════════

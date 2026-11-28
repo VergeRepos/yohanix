@@ -150,6 +150,18 @@ def test_backtest_status():
     assert "running" in data
 
 
+def test_discord_top_10_endpoint():
+    mock_recs = [
+        {"ticker": "AAPL", "action": "BUY", "composite_score": 75.0, "confidence": 85, "thesis": "Strong buy thesis", "technical_summary": "Bullish", "invalidation": "Drop below $150"}
+    ]
+    with patch("stockpulse.api.server._get_latest_scan", return_value=mock_recs):
+        r = client.get("/api/discord/top-10")
+        assert r.status_code == 200
+        assert "AAPL" in r.text
+        assert "Top 10 Best Trades" in r.text
+        assert "Strong buy thesis" in r.text
+
+
 def test_activity():
     with patch("stockpulse.api.server._parse_activity_log", return_value=[]):
         r = client.get("/api/activity")

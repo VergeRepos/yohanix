@@ -6,6 +6,22 @@ from stockpulse.config.settings import get_config
 
 logger = logging.getLogger(__name__)
 
+def _get_top_10_components() -> list:
+    top_10_url = get_config().get("discord_top_10_url", "http://localhost:18000/api/discord/top-10")
+    return [
+        {
+            "type": 1,
+            "components": [
+                {
+                    "type": 2,
+                    "style": 5,
+                    "label": "📊 View Top 10 Best Trades",
+                    "url": top_10_url
+                }
+            ]
+        }
+    ]
+
 def _format_embed(alert: dict) -> dict:
     ticker = alert.get("ticker", "???")
     action = alert.get("action", "???")
@@ -86,7 +102,8 @@ def send_discord_periodic_update() -> bool:
                 "description": f"Automated 30-sec live update (Refreshed: {timestamp}). Total scanned: {len(recs)} tickers.",
                 "color": 0x0099FF,
                 "fields": fields if fields else [{"name": "Status", "value": "No scan data found yet. Run a scan.", "inline": False}]
-            }]
+            }],
+            "components": _get_top_10_components()
         }
 
         # Load last message id
@@ -179,7 +196,8 @@ def send_discord_trade_list() -> dict:
                 "description": f"Manually pushed complete ranked trade list. Total candidates: {len(sorted_recs)}.",
                 "color": 0x22C55E,
                 "fields": fields
-            }]
+            }],
+            "components": _get_top_10_components()
         }
 
         resp = requests.post(url, json=payload, timeout=10)
