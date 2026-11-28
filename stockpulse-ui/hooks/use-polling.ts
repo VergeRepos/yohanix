@@ -1,20 +1,25 @@
 "use client";
 import { useState, useEffect, useCallback, useRef } from "react";
 
+const clientCache = new Map<string, { data: any; time: number }>();
+
 export function usePolling<T>(
   fetcher: () => Promise<T>,
-  intervalMs: number = 30000
+  intervalMs: number = 15000
 ) {
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState(true);
+  const key = fetcher.toString();
+  const cached = clientCache.get(key);
+
+  const [data, setData] = useState<T | null>(cached ? cached.data : null);
+  const [loading, setLoading] = useState(!cached);
   const [error, setError] = useState<string | null>(null);
+
   const fetcherRef = useRef(fetcher);
   const inFlightRef = useRef(false);
   const visibleRef = useRef(true);
   fetcherRef.current = fetcher;
 
   const refresh = useCallback(async () => {
-    // Skip if a fetch is already in progress or tab is hidden
     if (inFlightRef.current) return;
     if (!visibleRef.current) return;
 
@@ -22,6 +27,7 @@ export function usePolling<T>(
     try {
       const result = await fetcherRef.current();
       setData(result);
+      clientCache.set(key, { data: result, time: Date.now() });
       setError(null);
     } catch (e: any) {
       setError(e.message || "Failed to fetch");
@@ -29,13 +35,12 @@ export function usePolling<T>(
       setLoading(false);
       inFlightRef.current = false;
     }
-  }, []);
+  }, [key]);
 
   useEffect(() => {
     refresh();
     const id = setInterval(refresh, intervalMs);
 
-    // Pause polling when tab is hidden, resume when visible
     const onVisibility = () => {
       visibleRef.current = !document.hidden;
       if (!document.hidden) refresh();

@@ -5,7 +5,7 @@ import threading
 from datetime import datetime
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Yohanix API", version="1.0.0")
@@ -20,9 +20,13 @@ logger = logging.getLogger(__name__)
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
+_scheduler = None
+
+
 @app.on_event("startup")
 def start_background_scheduler():
-    """Start APScheduler in background when FastAPI starts up so jobs (including 1-min Discord updates) run automatically."""
+    """Start APScheduler in background when FastAPI starts up so jobs (including 30-sec Discord updates) run automatically."""
+    global _scheduler
     try:
         from apscheduler.schedulers.background import BackgroundScheduler
         from apscheduler.triggers.cron import CronTrigger
@@ -37,35 +41,48 @@ def start_background_scheduler():
         sched_cfg = strat.get("scheduling", {})
         tz = sched_cfg.get("timezone", "US/Eastern")
 
-        scheduler = BackgroundScheduler(timezone=tz)
+        _scheduler = BackgroundScheduler(timezone=tz)
 
         morning_time = sched_cfg.get("morning_scan", "09:35")
         h, m = morning_time.split(":")
-        scheduler.add_job(morning_scan_job, CronTrigger(hour=int(h), minute=int(m), day_of_week="mon-fri", timezone=tz), id="morning_scan")
+        _scheduler.add_job(morning_scan_job, CronTrigger(hour=int(h), minute=int(m), day_of_week="mon-fri", timezone=tz), id="morning_scan")
 
-        scheduler.add_job(intraday_check_job, IntervalTrigger(seconds=45), id="intraday_check", name="45s Intraday Scan & Update")
+        _scheduler.add_job(intraday_check_job, IntervalTrigger(seconds=45), id="intraday_check", name="45s Intraday Scan & Update", max_instances=3, coalesce=True)
 
         rebound_interval = sched_cfg.get("rebound_scan_interval_minutes", 10)
-        scheduler.add_job(rebound_scan_job, CronTrigger(minute=f"*/{rebound_interval}", hour="10-15", day_of_week="mon-fri", timezone=tz), id="rebound_scan")
+        _scheduler.add_job(rebound_scan_job, CronTrigger(minute=f"*/{rebound_interval}", hour="10-15", day_of_week="mon-fri", timezone=tz), id="rebound_scan")
 
         eod_time = sched_cfg.get("eod_recap", "16:30")
         h, m = eod_time.split(":")
-        scheduler.add_job(eod_recap_job, CronTrigger(hour=int(h), minute=int(m), day_of_week="mon-fri", timezone=tz), id="eod_recap")
+        _scheduler.add_job(eod_recap_job, CronTrigger(hour=int(h), minute=int(m), day_of_week="mon-fri", timezone=tz), id="eod_recap")
 
         sec_interval = sched_cfg.get("sec_scan_interval_hours", 2)
-        scheduler.add_job(sec_scan_job, CronTrigger(hour=f"*/{sec_interval}", day_of_week="mon-fri", timezone=tz), id="sec_scan")
+        _scheduler.add_job(sec_scan_job, CronTrigger(hour=f"*/{sec_interval}", day_of_week="mon-fri", timezone=tz), id="sec_scan")
 
-        scheduler.add_job(portfolio_check_job, IntervalTrigger(seconds=45), id="portfolio_check", name="45s Portfolio Check")
-        scheduler.add_job(signal_tracking_job, CronTrigger(hour="17", minute="0", day_of_week="mon-fri", timezone=tz), id="signal_tracking")
-        scheduler.add_job(weekly_digest_job, CronTrigger(hour="18", minute="0", day_of_week="sun", timezone=tz), id="weekly_digest")
+        _scheduler.add_job(portfolio_check_job, IntervalTrigger(seconds=45), id="portfolio_check", name="45s Portfolio Check", max_instances=3, coalesce=True)
+        _scheduler.add_job(signal_tracking_job, CronTrigger(hour="17", minute="0", day_of_week="mon-fri", timezone=tz), id="signal_tracking")
+        _scheduler.add_job(weekly_digest_job, CronTrigger(hour="18", minute="0", day_of_week="sun", timezone=tz), id="weekly_digest")
 
         # 30-second Discord periodic top 10 report
-        scheduler.add_job(discord_periodic_job, IntervalTrigger(seconds=30), id="discord_periodic", name="Discord 30-sec Periodic Update")
+        _scheduler.add_job(discord_periodic_job, IntervalTrigger(seconds=30), id="discord_periodic", name="Discord 30-sec Periodic Update")
 
-        scheduler.start()
-        logger.info("Background scheduler started successfully inside FastAPI with %d jobs", len(scheduler.get_jobs()))
+        _scheduler.start()
+        logger.info("Background scheduler started successfully inside FastAPI with %d jobs", len(_scheduler.get_jobs()))
     except Exception:
         logger.exception("Failed to start background scheduler in FastAPI")
+
+
+@app.on_event("shutdown")
+def stop_background_scheduler():
+    """Gracefully shut down APScheduler when FastAPI stops or reloads."""
+    global _scheduler
+    if _scheduler is not None:
+        try:
+            _scheduler.shutdown(wait=False)
+            logger.info("Background scheduler shut down successfully.")
+        except Exception:
+            pass
+        _scheduler = None
 
 
 def _read_json(path: Path) -> dict | list:
@@ -276,7 +293,8 @@ def health_check():
 
 
 @app.get("/api/dashboard")
-def get_dashboard():
+def get_dashboard(response: Response):
+    response.headers["Cache-Control"] = "public, max-age=10"
     from stockpulse.portfolio.tracker import get_portfolio_status
     portfolio = get_portfolio_status()
     all_recs = _get_latest_scan()
@@ -300,7 +318,8 @@ def get_dashboard():
 # ═══════════════════════════════════════════════════
 
 @app.get("/api/watchlist")
-def get_watchlist():
+def get_watchlist(response: Response):
+    response.headers["Cache-Control"] = "public, max-age=10"
     from stockpulse.config.settings import load_watchlists
     wl = load_watchlists()
     all_recs = _get_latest_scan()
@@ -352,7 +371,8 @@ def get_watchlist_ticker(ticker: str):
 # ═══════════════════════════════════════════════════
 
 @app.get("/api/portfolio")
-def get_portfolio():
+def get_portfolio(response: Response):
+    response.headers["Cache-Control"] = "public, max-age=10"
     from stockpulse.portfolio.tracker import get_portfolio_status
     from stockpulse.portfolio.risk import check_drawdown_status
     from stockpulse.config.settings import load_portfolio
@@ -774,6 +794,16 @@ def get_recent_alerts():
             pass
     alerts.reverse()
     return alerts
+
+
+@app.post("/api/discord/send-trades")
+def api_send_discord_trades():
+    """Send ordered trade list to Discord webhook."""
+    from stockpulse.alerts.discord_alert import send_discord_trade_list
+    result = send_discord_trade_list()
+    if not result.get("success"):
+        raise HTTPException(400, result.get("error", "Failed to send trade list"))
+    return result
 
 
 # ═══════════════════════════════════════════════════

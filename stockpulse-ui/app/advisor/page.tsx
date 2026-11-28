@@ -184,7 +184,7 @@ function SuggestionCard({ suggestion, onDismiss, onExecute }: {
 }
 
 export default function AdvisorPage() {
-  const { data, loading, refresh } = usePolling<AdvisorResponse>(api.advisorSuggestions, 5000);
+  const { data, loading, refresh } = usePolling<AdvisorResponse>(api.advisorSuggestions, 15000);
   const [evaluating, setEvaluating] = useState(false);
   const [dismissing, setDismissing] = useState<string | null>(null);
 

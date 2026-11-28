@@ -82,4 +82,6 @@ export const api = {
     fetcher<any>("/api/rebound/close", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ticker, exit_price, reason: reason || "manual" }) }),
   reboundExits: () => fetcher<any>("/api/rebound/exits"),
   reboundConfig: () => fetcher<any>("/api/rebound/config"),
+  health: () => fetcher<any>("/api/health"),
+  sendDiscordTrades: () => fetcher<any>("/api/discord/send-trades", { method: "POST" }),
 };

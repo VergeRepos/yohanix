@@ -23,7 +23,7 @@ import { ApiErrorBanner } from "@/components/api-error-banner";
 const ACTIONS: Action[] = ["BUY", "WATCHLIST", "HOLD", "CAUTION", "SELL"];
 
 export default function WatchlistPage() {
-  const { data, loading, error, refresh } = usePolling<Recommendation[]>(api.watchlist, 5000);
+  const { data, loading, error, refresh } = usePolling<Recommendation[]>(api.watchlist, 15000);
   const [filter, setFilter] = useState<Action | "ALL">("ALL");
   const [search, setSearch] = useState("");
   const [addTicker, setAddTicker] = useState("");

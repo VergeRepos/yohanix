@@ -68,29 +68,33 @@ def get_price_history(
     days = period_days.get(period, 365)
     start = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
 
-    try:
-        df = yf.download(
-            ticker,
-            start=start,
-            interval=interval,
-            progress=False,
-            timeout=15,
-        )
+    for attempt in range(2):
+        try:
+            df = yf.download(
+                ticker,
+                start=start,
+                interval=interval,
+                progress=False,
+                timeout=15,
+            )
 
-        if df.empty:
-            logger.warning("No price data for %s", ticker)
-            set_cached(cache_key, pd.DataFrame())
+            if df.empty:
+                logger.warning("No price data for %s", ticker)
+                set_cached(cache_key, pd.DataFrame())
+                return pd.DataFrame()
+
+            if isinstance(df.columns, pd.MultiIndex):
+                df.columns = df.columns.get_level_values(0)
+
+            set_cached(cache_key, df)
+            return df
+
+        except Exception:
+            if attempt == 0:
+                time.sleep(2)
+                continue
+            logger.exception("Failed to fetch price data for %s", ticker)
             return pd.DataFrame()
-
-        if isinstance(df.columns, pd.MultiIndex):
-            df.columns = df.columns.get_level_values(0)
-
-        set_cached(cache_key, df)
-        return df
-
-    except Exception:
-        logger.exception("Failed to fetch price data for %s", ticker)
-        return pd.DataFrame()
 
 
 def get_current_quote(ticker: str) -> dict:
@@ -285,48 +289,52 @@ def bulk_download(
     start = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
     end = datetime.now().strftime("%Y-%m-%d")
 
-    try:
-        data = yf.download(
-            tickers,
-            start=start,
-            end=end,
-            group_by="ticker",
-            threads=True,
-            progress=False,
-            timeout=30,
-        )
+    for attempt in range(2):
+        try:
+            data = yf.download(
+                tickers,
+                start=start,
+                end=end,
+                group_by="ticker",
+                threads=True,
+                progress=False,
+                timeout=30,
+            )
 
-        result = {}
+            result = {}
 
-        if isinstance(data.columns, pd.MultiIndex) and len(tickers) == 1:
-            data.columns = data.columns.get_level_values(0)
+            if isinstance(data.columns, pd.MultiIndex) and len(tickers) == 1:
+                data.columns = data.columns.get_level_values(0)
 
-        if len(tickers) == 1:
-            if not data.empty:
-                result[tickers[0]] = data
-                set_cached(
-                    f"price_{tickers[0]}_{period}_1d",
-                    data,
-                )
+            if len(tickers) == 1:
+                if not data.empty:
+                    result[tickers[0]] = data
+                    set_cached(
+                        f"price_{tickers[0]}_{period}_1d",
+                        data,
+                    )
 
-        else:
-            for ticker in tickers:
-                try:
-                    df = data[ticker].dropna(how="all")
+            else:
+                for ticker in tickers:
+                    try:
+                        df = data[ticker].dropna(how="all")
 
-                    if not df.empty and len(df) >= 10:
-                        result[ticker] = df
+                        if not df.empty and len(df) >= 10:
+                            result[ticker] = df
 
-                        set_cached(
-                            f"price_{ticker}_{period}_1d",
-                            df,
-                        )
+                            set_cached(
+                                f"price_{ticker}_{period}_1d",
+                                df,
+                            )
 
-                except (KeyError, AttributeError):
-                    continue
+                    except (KeyError, AttributeError):
+                        continue
 
-        return result
+            return result
 
-    except Exception:
-        logger.exception("Bulk download failed")
-        return {}
+        except Exception:
+            if attempt == 0:
+                time.sleep(2)
+                continue
+            logger.exception("Bulk download failed")
+            return {}

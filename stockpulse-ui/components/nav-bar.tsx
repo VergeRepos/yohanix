@@ -18,6 +18,7 @@ const navItems = [
   { href: "/rebound", label: "Rebound" },
   { href: "/reports", label: "Reports" },
   { href: "/settings", label: "Settings" },
+  { href: "/ui-settings", label: "UI Settings" },
 ];
 
 export function NavBar() {
