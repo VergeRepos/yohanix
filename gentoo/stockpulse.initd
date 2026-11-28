@@ -1,0 +1,16 @@
+#!/sbin/openrc-run
+# Copyright 2026 Gentoo Authors
+# Distributed under the terms of the MIT License
+
+name="StockPulse Daemon"
+description="Local stock research, scan, and API service"
+command="/usr/bin/stockpulse"
+command_args="schedule"
+command_user="stockpulse:stockpulse"
+pidfile="/run/stockpulse.pid"
+command_background="yes"
+
+depend() {
+	need net
+	after firewall
+}

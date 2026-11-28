@@ -1,0 +1,4 @@
+# Configuration for stockpulse service
+
+# Log level (DEBUG, INFO, WARNING, ERROR)
+LOG_LEVEL="INFO"
